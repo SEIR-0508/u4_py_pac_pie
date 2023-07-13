@@ -7,6 +7,7 @@ spaces = {"a1": " ",
           "c1": " ",
           "c2": " ",
           "c3": " "}
+turn_count = 0
 
 board = []
 
@@ -32,7 +33,8 @@ def print_board():
 
 
 def reset_game():
-    global spaces
+    global spaces, turn_count
+    turn_count = 0
     spaces = {"a1": " ",
               "a2": " ",
               "a3": " ",
@@ -67,7 +69,14 @@ def check_winner():
 
 
 def init_turn():
-    global spaces, x_turn
+    global spaces, x_turn, turn_count
+    if turn_count >= 9:
+        inp = input("Another tie! Play again? (Y/N): ").lower()
+        if inp == 'y':
+            reset_game()
+            init_game()
+        else:
+            return
     check_winner_result = check_winner()
     if check_winner_result:
         print_board()
@@ -76,6 +85,8 @@ def init_turn():
         if inp == 'y':
             reset_game()
             init_game()
+        else:
+            return
 
     if x_turn:
         print_board()
@@ -83,6 +94,7 @@ def init_turn():
         if spaces[inp] == " ":
             spaces[inp] = "X"
             x_turn = False
+            turn_count += 1
         else:
             print('Bogus move! Try again...')
             init_turn()
@@ -94,6 +106,7 @@ def init_turn():
         if spaces[inp] == " ":
             spaces[inp] = "O"
             x_turn = True
+            turn_count += 1
         else:
             print('Bogus move! Try again...')
             init_turn()
